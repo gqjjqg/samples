@@ -10,7 +10,7 @@
 	    android:layout_height="220dp"
 	    android:layout_centerHorizontal="true"
 	    android:scrollbars="none"
-	    app:dividerHeight="0.5dp"
+	    app:dividerHeight="1dp"
 	    app:listSelector="@android:drawable/list_selector_background" />
 
 	<Button
