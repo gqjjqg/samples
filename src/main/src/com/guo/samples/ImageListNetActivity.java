@@ -72,7 +72,7 @@ public class ImageListNetActivity extends ListActivity implements OnItemClickLis
         mCacheThread.start();
 
         mHandler = new Handler();
-        mDownloaderManager = new DownloaderManager();
+        mDownloaderManager = new DownloaderManager<String>();
     }
     
     private class ListImage extends BaseAdapter {
@@ -132,9 +132,9 @@ public class ImageListNetActivity extends ListActivity implements OnItemClickLis
     	
     	private class Mointor extends BitmapMonitor<ExtImageView, String> {
 	
-    		private Downloader data;
+    		private Downloader<String> data;
     		
-    		public Mointor(ExtImageView view, String id, Downloader data) {
+    		public Mointor(ExtImageView view, String id, Downloader<String> data) {
 				super(view, id);
 				// TODO Auto-generated constructor stub
 				this.data = data;
