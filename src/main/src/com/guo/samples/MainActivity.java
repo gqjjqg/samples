@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
 				"CustomWidget",
 				"HListView",
 				"ListImageNet",
-				"Test6","Test6",
+				"Camera","CameraV4L2",
 				"Test3","Test6","Test6",
 				"Test4","Test6","Test6",
 				"Test5","Test6","Test6",
@@ -129,6 +129,12 @@ public class MainActivity extends Activity {
 				startActivity(intent);
 			} else if (arg2 == 4) {
 				Intent intent = new Intent(MainActivity.this, ImageListNetActivity.class);
+				startActivity(intent);
+			} else if (arg2 == 5) {
+				Intent intent = new Intent(MainActivity.this, CameraActivity.class);
+				startActivity(intent);
+			} else if (arg2 == 6) {
+				Intent intent = new Intent(MainActivity.this, VideoActivity.class);
 				startActivity(intent);
 			}
 		}
