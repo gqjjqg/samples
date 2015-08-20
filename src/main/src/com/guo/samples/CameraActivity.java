@@ -34,7 +34,7 @@ public class CameraActivity extends Activity implements OnCameraListener, Render
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
-		this.setContentView(R.layout.camera);
+		this.setContentView(R.layout.activity_camera);
 		
 		mSurfaceView = (CameraSurfaceView) findViewById(R.id.surfaceView1);  
 		mSurfaceView.setOnCameraListener(this);

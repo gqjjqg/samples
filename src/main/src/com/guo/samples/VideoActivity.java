@@ -7,7 +7,6 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.Toast;
 
 import com.guo.android_extend.GLES2Render;
 import com.guo.android_extend.device.VideoClient;
@@ -35,7 +34,7 @@ public class VideoActivity extends Activity implements Renderer, VideoClient.OnC
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
-		this.setContentView(R.layout.camera);
+		this.setContentView(R.layout.activity_camera);
 		
 		mGLSurfaceView = (GLSurfaceView) findViewById(R.id.glsurfaceView1);
 		mGLSurfaceView.setEGLContextClientVersion(2);
