@@ -9,7 +9,7 @@ import android.graphics.Rect;
 import android.media.ExifInterface;
 import android.os.Bundle;
 import android.util.Log;
-import com.guo.android_extend.CustomOrientationDetector;
+import com.guo.android_extend.widget.ExtOrientationDetector;
 import com.guo.android_extend.controller.ImageController;
 import com.guo.android_extend.widget.ExtImageView;
 
@@ -18,7 +18,7 @@ public class ImageViewActivity extends Activity {
 	private final String TAG = this.getClass().toString();
 
 	String mFilePath;
-	CustomOrientationDetector mODetector;
+	ExtOrientationDetector mODetector;
 	ExtImageView eiv;
 	Bitmap mBitmap;
 	Rect rect;
@@ -33,7 +33,7 @@ public class ImageViewActivity extends Activity {
 		
 		setContentView(R.layout.activity_imageview);
 		
-		mODetector = new CustomOrientationDetector(this);
+		mODetector = new ExtOrientationDetector(this);
 		mODetector.enable();
 		
 		eiv = (ExtImageView) this.findViewById(R.id.imageView1);

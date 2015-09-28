@@ -1,7 +1,7 @@
 package com.guo.samples;
 
-import com.guo.android_extend.CustomOrientationDetector;
-import com.guo.android_extend.CustomOrientationDetector.OnOrientationListener;
+import com.guo.android_extend.widget.ExtOrientationDetector;
+import com.guo.android_extend.widget.ExtOrientationDetector.OnOrientationListener;
 import com.guo.android_extend.widget.ExtImageView;
 import com.guo.android_extend.widget.HListView;
 
@@ -22,14 +22,14 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
-	CustomOrientationDetector mODetector;
+	ExtOrientationDetector mODetector;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		mODetector = new CustomOrientationDetector(this);
+		mODetector = new ExtOrientationDetector(this);
 		mODetector.enable();
 		
 		HListView hv = (HListView) this.findViewById(R.id.listView1);
@@ -38,7 +38,6 @@ public class MainActivity extends Activity {
 		hv.setOnItemClickListener(vla);
 		
 		Log.d("test", "Config.ARGB_8888=" + Config.ARGB_8888);
-		
 	}
 	
 	class Holder {
