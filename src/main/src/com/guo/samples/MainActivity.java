@@ -1,7 +1,7 @@
 package com.guo.samples;
 
-import com.guo.android_extend.CustomOrientationDetector;
-import com.guo.android_extend.CustomOrientationDetector.OnOrientationListener;
+import com.guo.android_extend.widget.ExtOrientationDetector;
+import com.guo.android_extend.widget.ExtOrientationDetector.OnOrientationListener;
 import com.guo.android_extend.widget.ExtImageView;
 import com.guo.android_extend.widget.HListView;
 
@@ -22,14 +22,14 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
-	CustomOrientationDetector mODetector;
+	ExtOrientationDetector mODetector;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		mODetector = new CustomOrientationDetector(this);
+		mODetector = new ExtOrientationDetector(this);
 		mODetector.enable();
 		
 		HListView hv = (HListView) this.findViewById(R.id.listView1);
@@ -38,7 +38,6 @@ public class MainActivity extends Activity {
 		hv.setOnItemClickListener(vla);
 		
 		Log.d("test", "Config.ARGB_8888=" + Config.ARGB_8888);
-		
 	}
 	
 	class Holder {
@@ -56,7 +55,7 @@ public class MainActivity extends Activity {
 				"CustomWidget",
 				"HListView",
 				"ListImageNet",
-				"Test6","Test6",
+				"Camera","CameraV4L2",
 				"Test3","Test6","Test6",
 				"Test4","Test6","Test6",
 				"Test5","Test6","Test6",
@@ -129,6 +128,12 @@ public class MainActivity extends Activity {
 				startActivity(intent);
 			} else if (arg2 == 4) {
 				Intent intent = new Intent(MainActivity.this, ImageListNetActivity.class);
+				startActivity(intent);
+			} else if (arg2 == 5) {
+				Intent intent = new Intent(MainActivity.this, CameraActivity.class);
+				startActivity(intent);
+			} else if (arg2 == 6) {
+				Intent intent = new Intent(MainActivity.this, VideoActivity.class);
 				startActivity(intent);
 			}
 		}
