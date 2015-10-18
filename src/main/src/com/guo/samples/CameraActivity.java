@@ -4,26 +4,21 @@ import android.app.Activity;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.opengl.GLSurfaceView;
-import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
+import android.util.Log;
 
-import com.guo.android_extend.GLES2Render;
-import com.guo.android_extend.image.ImageConverter;
+import com.guo.android_extend.widget.CameraGLSurfaceView;
 import com.guo.android_extend.widget.CameraSurfaceView;
 import com.guo.android_extend.widget.CameraSurfaceView.OnCameraListener;
-import com.guo.android_extend.widget.ExtGLSurfaceView;
 
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
+import java.util.List;
 
-public class CameraActivity extends Activity implements OnCameraListener, Renderer {
+public class CameraActivity extends Activity implements OnCameraListener {
 	private final String TAG = this.getClass().getSimpleName();
 	
 	private int mWidth, mHeight, mFormat;
 	private CameraSurfaceView mSurfaceView;
-	private ExtGLSurfaceView mGLSurfaceView;
-	private GLES2Render mGLES2Render;
-	private byte[] mImageData;
+	private CameraGLSurfaceView mGLSurfaceView;
 	private Camera mCamera;
 	
 	/* (non-Javadoc)
@@ -35,18 +30,14 @@ public class CameraActivity extends Activity implements OnCameraListener, Render
 		super.onCreate(savedInstanceState);
 		
 		this.setContentView(R.layout.activity_camera);
-		
-		mSurfaceView = (CameraSurfaceView) findViewById(R.id.surfaceView1);  
+
+		mGLSurfaceView = (CameraGLSurfaceView) findViewById(R.id.glsurfaceView1);
+
+		mSurfaceView = (CameraSurfaceView) findViewById(R.id.surfaceView1);
 		mSurfaceView.setOnCameraListener(this);
-		mSurfaceView.showFPS(true);
-		
-		mGLSurfaceView = (ExtGLSurfaceView) findViewById(R.id.glsurfaceView1);
-		mGLSurfaceView.setEGLContextClientVersion(2);
-		mGLSurfaceView.setRenderer(this);
-		mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-		mGLSurfaceView.setZOrderMediaOverlay(true);
-		
-		mImageData = null;
+		mSurfaceView.setupGLSurafceView(mGLSurfaceView, true, true, 270);
+		mSurfaceView.debug_print_fps(true, false);
+
 		mWidth = 1280;
 		mHeight = 720;
 		mFormat = ImageFormat.NV21;
@@ -64,12 +55,19 @@ public class CameraActivity extends Activity implements OnCameraListener, Render
 	@Override
 	public Camera setupCamera() {
 		// TODO Auto-generated method stub
-		mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
+		mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
 		try {
 			Camera.Parameters parameters = mCamera.getParameters();
 			parameters.setPreviewSize(mWidth, mHeight);
 			parameters.setPreviewFormat(mFormat);
-			//parameters.setPreviewFpsRange(20000, 60000);
+			List<int[]> fps = parameters.getSupportedPreviewFpsRange();
+			for(int[] count : fps) {
+				Log.d(TAG, "T:");
+				for (int data : count) {
+					Log.d(TAG, "V=" + data);
+				}
+			}
+			parameters.setPreviewFpsRange(15000, 30000);
 			//parameters.setExposureCompensation(parameters.getMaxExposureCompensation());
 			//parameters.setWhiteBalance(Camera.Parameters.WHITE_BALANCE_AUTO);
 			//parameters.setAntibanding(Camera.Parameters.ANTIBANDING_AUTO);
@@ -82,7 +80,6 @@ public class CameraActivity extends Activity implements OnCameraListener, Render
 			mHeight = mCamera.getParameters().getPreviewSize().height;
 			e.printStackTrace();
 		}
-		mGLSurfaceView.setAspectRatio((double)mWidth / (double)mHeight);
 		return mCamera;
 	}
 	
@@ -98,30 +95,13 @@ public class CameraActivity extends Activity implements OnCameraListener, Render
 	}
 
 	@Override
-	public void onPreview(byte[] data, Camera camera) {
-		// TODO Auto-generated method stub
-		mImageData = data.clone();
-		mGLSurfaceView.requestRender();
+	public void onPreview(byte[] data, int width, int height, int format) {
+
 	}
 
 	@Override
-	public void onDrawFrame(GL10 gl) {
-		// TODO Auto-generated method stub
-		if (mImageData != null) {
-			mGLES2Render.render(mImageData, mWidth, mHeight);
-		}
-	}
+	public void onPreviewRender(byte[] data, int width, int height, int format) {
 
-	@Override
-	public void onSurfaceChanged(GL10 gl, int width, int height) {
-		// TODO Auto-generated method stub
-		mGLES2Render.setViewPort(width, height);
-	}
-
-	@Override
-	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-		// TODO Auto-generated method stub
-		mGLES2Render = new GLES2Render(true, 0, ImageConverter.CP_PAF_NV21, false);
 	}
 
 }

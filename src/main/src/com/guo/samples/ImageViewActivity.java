@@ -10,7 +10,7 @@ import android.media.ExifInterface;
 import android.os.Bundle;
 import android.util.Log;
 import com.guo.android_extend.widget.ExtOrientationDetector;
-import com.guo.android_extend.controller.ImageController;
+import com.guo.android_extend.widget.controller.ImageController;
 import com.guo.android_extend.widget.ExtImageView;
 
 public class ImageViewActivity extends Activity {
