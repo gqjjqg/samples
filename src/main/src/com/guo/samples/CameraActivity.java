@@ -35,7 +35,7 @@ public class CameraActivity extends Activity implements OnCameraListener {
 
 		mSurfaceView = (CameraSurfaceView) findViewById(R.id.surfaceView1);
 		mSurfaceView.setOnCameraListener(this);
-		mSurfaceView.setupGLSurafceView(mGLSurfaceView, true, true, 270);
+		mSurfaceView.setupGLSurafceView(mGLSurfaceView, true, false, 270);
 		mSurfaceView.debug_print_fps(true, false);
 
 		mWidth = 1280;
@@ -55,7 +55,7 @@ public class CameraActivity extends Activity implements OnCameraListener {
 	@Override
 	public Camera setupCamera() {
 		// TODO Auto-generated method stub
-		mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
+		mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
 		try {
 			Camera.Parameters parameters = mCamera.getParameters();
 			parameters.setPreviewSize(mWidth, mHeight);
