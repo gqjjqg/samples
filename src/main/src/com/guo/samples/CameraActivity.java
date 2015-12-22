@@ -60,6 +60,14 @@ public class CameraActivity extends Activity implements OnCameraListener {
 			Camera.Parameters parameters = mCamera.getParameters();
 			parameters.setPreviewSize(mWidth, mHeight);
 			parameters.setPreviewFormat(mFormat);
+
+			for( Camera.Size size : parameters.getSupportedPreviewSizes()) {
+				Log.d(TAG, "SIZE:" + size.width + "x" + size.height);
+			}
+			for( Integer format : parameters.getSupportedPreviewFormats()) {
+				Log.d(TAG, "FORMAT:" + format);
+			}
+
 			List<int[]> fps = parameters.getSupportedPreviewFpsRange();
 			for(int[] count : fps) {
 				Log.d(TAG, "T:");
