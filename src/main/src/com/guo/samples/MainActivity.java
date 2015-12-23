@@ -1,6 +1,5 @@
 package com.guo.samples;
 
-import com.guo.android_extend.network.socket.TCP.SocketClient;
 import com.guo.android_extend.widget.ExtOrientationDetector;
 import com.guo.android_extend.widget.ExtOrientationDetector.OnOrientationListener;
 import com.guo.android_extend.widget.ExtImageView;
