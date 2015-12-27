@@ -18,9 +18,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.guo.android_extend.network.socket.OnSocketListener;
-import com.guo.android_extend.network.socket.SocketClient;
-import com.guo.android_extend.network.socket.SocketServer;
-import com.guo.android_extend.network.socket.UDP.UDPModule;
+import com.guo.android_extend.network.socket.SocketModule;
+import com.guo.android_extend.network.udp.UDPModule;
 import com.guo.android_extend.widget.ExtImageView;
 
 import java.util.ArrayList;
@@ -29,14 +28,13 @@ import java.util.List;
 /**
  * Created by gqj3375 on 2015/12/22.
  */
-public class SocketActivity extends Activity implements UDPModule.OnUDPListener, CompoundButton.OnCheckedChangeListener, AdapterView.OnItemClickListener, OnSocketListener, View.OnClickListener {
+public class SocketActivity extends Activity implements UDPModule.OnUDPListener, AdapterView.OnItemClickListener, OnSocketListener, View.OnClickListener {
 
 	private final String TAG = this.getClass().getSimpleName();
 
 	private UDPModule mUDPModule;
 
-	private SocketClient mSocketClient;
-	private SocketServer mSocketServer;
+	private SocketModule mSocketModule;
 
 	private ListDevice mListDevice;
 
@@ -53,7 +51,6 @@ public class SocketActivity extends Activity implements UDPModule.OnUDPListener,
 		this.setContentView(R.layout.activity_socket);
 		ListView view = (ListView) findViewById(R.id.listView);
 		mCheckBox = (CheckBox) findViewById(R.id.checkBox1);
-		mCheckBox.setOnCheckedChangeListener(this);
 		view.setOnItemClickListener(this);
 		Button btn = (Button) findViewById(R.id.button);
 		btn.setOnClickListener(this);
@@ -65,20 +62,16 @@ public class SocketActivity extends Activity implements UDPModule.OnUDPListener,
 		mListDevice = new ListDevice(this);
 		view.setAdapter(mListDevice);
 
-		mSocketClient = null;
-		mSocketServer = null;
-
+		mSocketModule = new SocketModule(workdir);
+		mSocketModule.setOnSocketListener(this);
 	}
 
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		if (mSocketServer != null) {
-			mSocketServer.destroy();
-		}
-		if (mSocketClient != null) {
-			mSocketClient.destroy();
+		if (mSocketModule != null) {
+			mSocketModule.destroy();
 		}
 		mUDPModule.destroy();
 	}
@@ -95,24 +88,11 @@ public class SocketActivity extends Activity implements UDPModule.OnUDPListener,
 	}
 
 	@Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		if (isChecked) {
-			mSocketServer = new SocketServer(workdir);
-			mSocketServer.setOnSocketListener(this);
-		} else {
-			mSocketServer.destroy();
-			mSocketServer = null;
-		}
-	}
-
-	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		UDPModule.Device dev = mListDevice.mData.get(position);
-		if (mSocketClient != null) {
-			mSocketClient.destroy();
+		if (mSocketModule != null) {
+			mSocketModule.connect(dev.mIP);
 		}
-		mSocketClient = new SocketClient(workdir, dev.mIP);
-		mSocketClient.setOnSocketListener(this);
 	}
 
 	@Override
@@ -124,24 +104,45 @@ public class SocketActivity extends Activity implements UDPModule.OnUDPListener,
 	public void onSocketEvent(int e) {
 		Log.e(TAG, "EVENT=" + e);
 		if (e == OnSocketListener.EVENT_CONNECTED) {
-
+			Log.e(TAG, "EVENT_CONNECTED");
 		}
 	}
 
 	@Override
-	public void onFileReceived(String file) {
-
+	public void onFileReceiveProcess(String file, int percent) {
+		Log.d(TAG, "onFileReceiveProcess [" + file + "] progress:" + percent);
 	}
 
 	@Override
-	public void onFileSendOver(String file) {
-
+	public void onFileReceived(final String file) {
+		Log.d(TAG, "onFileReceived [" + file + "]");
+		this.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				mTextView.setText(file);
+			}
+		});
 	}
 
 	@Override
-	public void onDataReceived(byte[] data) {
+	public void onFileSendProcess(String file, int percent) {
+		Log.d(TAG, "onFileSendProcess [" + file + "] progress:" + percent);
+	}
+
+	@Override
+	public void onFileSended(String file) {
+		Log.d(TAG, "onFileSended [" + file + "]");
+	}
+
+	@Override
+	public void onDataReceiveProcess(String tag, int percent) {
+		Log.d(TAG, "onDataReceiveProcess [" + tag + "] progress:" + percent);
+	}
+
+	@Override
+	public void onDataReceived(String tag, byte[] data) {
 		final String val = new String(data, 0, data.length);
-		Log.d(TAG, "onDataReceived=" + val);
+		Log.d(TAG, "onDataReceived=" + val + "," + tag + "," + data.length);
 		this.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -151,19 +152,34 @@ public class SocketActivity extends Activity implements UDPModule.OnUDPListener,
 	}
 
 	@Override
-	public void onDataSendOver(String name) {
-		Log.d(TAG, "onDataSendOver=" + name);
+	public void onDataSendProcess(String tag, int percent) {
+		Log.d(TAG, "onDataSendProcess progress:" + percent);
+	}
+
+	@Override
+	public void onDataSended(String tag) {
+		Log.d(TAG, "onDataSended [" + tag + "]");
 	}
 
 	@Override
 	public void onClick(View v) {
-		mCount++;
-		String val = mData + mCount;
-		byte[] data = val.getBytes();
-		if (mCheckBox.isChecked()) {
-			mSocketServer.send(data, data.length);
+		if (!mCheckBox.isChecked()) {
+			mCount++;
+			String val = mData + mCount;
+			byte[] data = val.getBytes();
+			boolean success = mSocketModule.send(data, data.length);
+			if (success) {
+				Log.d(TAG, "Send success!");
+			} else {
+				Log.d(TAG, "Send fail!");
+			}
 		} else {
-			mSocketClient.send(data, data.length);
+			boolean success = mSocketModule.send(workdir + "test.APK");
+			if (success) {
+				Log.d(TAG, "Send success!");
+			} else {
+				Log.d(TAG, "Send fail!");
+			}
 		}
 	}
 

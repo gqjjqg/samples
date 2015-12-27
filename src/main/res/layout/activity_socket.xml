@@ -14,7 +14,7 @@
             style="@style/CustomCheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/server"
+            android:text="@string/check_socket"
             android:layout_gravity="center_vertical"/>
 
         <Button

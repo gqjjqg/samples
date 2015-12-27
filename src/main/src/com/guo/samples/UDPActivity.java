@@ -1,6 +1,5 @@
 package com.guo.samples;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.os.Build;
@@ -11,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.guo.android_extend.network.socket.UDP.UDPModule;
+import com.guo.android_extend.network.udp.UDPModule;
 import com.guo.android_extend.widget.ExtImageView;
 
 import java.util.ArrayList;
