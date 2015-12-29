@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,6 +21,7 @@ import com.guo.android_extend.network.socket.SocketModule;
 import com.guo.android_extend.network.udp.UDPModule;
 import com.guo.android_extend.widget.ExtImageView;
 
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,10 +101,16 @@ public class SocketActivity extends Activity implements UDPModule.OnUDPListener,
 	}
 
 	@Override
-	public void onSocketEvent(int e) {
+	public void onSocketEvent(Socket socket, int e) {
 		Log.e(TAG, "EVENT=" + e);
-		if (e == OnSocketListener.EVENT_CONNECTED) {
-			Log.e(TAG, "EVENT_CONNECTED");
+		if (e == OnSocketListener.EVENT_RECEIVER_CONNECTED) {
+			Log.e(TAG, "EVENT_RECEIVER_CONNECTED");
+		} else if (e == OnSocketListener.EVENT_RECEIVER_DISCONNECTED) {
+			Log.e(TAG, "EVENT_RECEIVER_DISCONNECTED");
+		} else if (e == OnSocketListener.EVENT_SENDER_CONNECTED) {
+			Log.e(TAG, "EVENT_SENDER_CONNECTED : " + socket.isConnected());
+		} else if (e == OnSocketListener.EVENT_SENDER_DISCONNECTED) {
+			Log.e(TAG, "EVENT_SENDER_DISCONNECTED");
 		}
 	}
 
