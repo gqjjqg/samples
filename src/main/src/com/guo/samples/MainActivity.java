@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
 				"HListView",
 				"ListImageNet",
 				"Camera","CameraV4L2",
-				"Test3","Test6","Test6",
+				"UDP","Socket","Test6",
 				"Test4","Test6","Test6",
 				"Test5","Test6","Test6",
 				"Test6","Test6","Test6",
@@ -134,6 +134,12 @@ public class MainActivity extends Activity {
 				startActivity(intent);
 			} else if (arg2 == 6) {
 				Intent intent = new Intent(MainActivity.this, VideoActivity.class);
+				startActivity(intent);
+			} else if (arg2 == 7) {
+				Intent intent = new Intent(MainActivity.this, UDPActivity.class);
+				startActivity(intent);
+			} else if (arg2 == 8) {
+				Intent intent = new Intent(MainActivity.this, SocketActivity.class);
 				startActivity(intent);
 			}
 		}

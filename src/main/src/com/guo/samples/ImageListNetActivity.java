@@ -26,8 +26,8 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.guo.android_extend.cache.BitmapMonitor;
 import com.guo.android_extend.cache.BitmapMonitorThread;
-import com.guo.android_extend.network.Downloader;
-import com.guo.android_extend.network.DownloaderManager;
+import com.guo.android_extend.network.http.Downloader;
+import com.guo.android_extend.network.http.DownloaderManager;
 import com.guo.android_extend.widget.ExtImageView;
 import com.guo.samples.ImageViewActivity;
 import com.guo.samples.R;
