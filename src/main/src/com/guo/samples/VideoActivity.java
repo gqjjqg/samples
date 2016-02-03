@@ -34,7 +34,7 @@ public class VideoActivity extends Activity implements Renderer, VideoClient.OnC
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
-		this.setContentView(R.layout.activity_camera);
+		this.setContentView(R.layout.activity_video);
 		
 		mGLSurfaceView = (GLSurfaceView) findViewById(R.id.glsurfaceView1);
 		mGLSurfaceView.setEGLContextClientVersion(2);
