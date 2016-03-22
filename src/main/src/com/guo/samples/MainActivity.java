@@ -1,5 +1,7 @@
 package com.guo.samples;
 
+import com.guo.android_extend.network.socket.SocketClient;
+import com.guo.android_extend.network.socket.SocketServer;
 import com.guo.android_extend.widget.ExtOrientationDetector;
 import com.guo.android_extend.widget.ExtOrientationDetector.OnOrientationListener;
 import com.guo.android_extend.widget.ExtImageView;
@@ -56,8 +58,8 @@ public class MainActivity extends Activity {
 				"HListView",
 				"ListImageNet",
 				"Camera","CameraV4L2",
-				"UDP","Socket","Test6",
-				"Test4","Test6","Test6",
+				"UDP","Socket","SocketClient","SocketServer",
+				"Test6","Test6",
 				"Test5","Test6","Test6",
 				"Test6","Test6","Test6",
 		};
@@ -140,6 +142,12 @@ public class MainActivity extends Activity {
 				startActivity(intent);
 			} else if (arg2 == 8) {
 				Intent intent = new Intent(MainActivity.this, SocketActivity.class);
+				startActivity(intent);
+			} else if (arg2 == 9) {
+				Intent intent = new Intent(MainActivity.this, SocketClientActivity.class);
+				startActivity(intent);
+			} else if (arg2 == 10) {
+				Intent intent = new Intent(MainActivity.this, SocketServerActivity.class);
 				startActivity(intent);
 			}
 		}
