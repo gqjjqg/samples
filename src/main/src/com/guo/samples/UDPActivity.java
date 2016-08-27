@@ -29,7 +29,7 @@ public class UDPActivity extends ListActivity implements UDPModule.OnUDPListener
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		mUDPModule = new UDPModule(this, Build.MODEL);
+		mUDPModule = new UDPModule(this, 5000);
 		mUDPModule.setOnUDPListener(this);
 		mListDevice = new ListDevice(this);
 		this.setListAdapter(mListDevice);

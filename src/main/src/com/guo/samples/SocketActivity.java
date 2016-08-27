@@ -16,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.guo.android_extend.network.socket.Data.AbsTransmitter;
 import com.guo.android_extend.network.socket.OnSocketListener;
 import com.guo.android_extend.network.socket.SocketModule;
 import com.guo.android_extend.network.udp.UDPModule;
@@ -57,7 +58,7 @@ public class SocketActivity extends Activity implements UDPModule.OnUDPListener,
 		mTextView = (TextView) findViewById(R.id.textView);
 		mTextView.setText(mData + mCount);
 
-		mUDPModule = new UDPModule(this, Build.MODEL);
+		mUDPModule = new UDPModule(this, 5000);
 		mUDPModule.setOnUDPListener(this);
 		mListDevice = new ListDevice(this);
 		view.setAdapter(mListDevice);
@@ -115,56 +116,35 @@ public class SocketActivity extends Activity implements UDPModule.OnUDPListener,
 	}
 
 	@Override
-	public void onFileReceiveProcess(String file, int percent) {
-		Log.d(TAG, "onFileReceiveProcess [" + file + "] progress:" + percent);
+	public void onReceiveProcess(AbsTransmitter obj, int percent) {
+		Log.d(TAG, "onFileReceiveProcess [" + obj.getName() + "] progress:" + percent);
 	}
 
 	@Override
-	public void onFileReceived(final String file) {
-		Log.d(TAG, "onFileReceived [" + file + "]");
+	public void onReceived(AbsTransmitter obj) {
+		Log.d(TAG, "onFileReceived [" + obj.getName() + "]");
+		final String name = obj.getName();
+		this.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {mTextView.setText(name);
+			}
+		});Log.d(TAG, "onFileReceived [" + name + "]");
 		this.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				mTextView.setText(file);
+				mTextView.setText(name);
 			}
 		});
 	}
 
 	@Override
-	public void onFileSendProcess(String file, int percent) {
-		Log.d(TAG, "onFileSendProcess [" + file + "] progress:" + percent);
+	public void onSendProcess(AbsTransmitter obj, int percent) {
+		Log.d(TAG, "onFileSendProcess [" + obj.getName() + "] progress:" + percent);
 	}
 
 	@Override
-	public void onFileSended(String file) {
-		Log.d(TAG, "onFileSended [" + file + "]");
-	}
-
-	@Override
-	public void onDataReceiveProcess(String tag, int percent) {
-		Log.d(TAG, "onDataReceiveProcess [" + tag + "] progress:" + percent);
-	}
-
-	@Override
-	public void onDataReceived(String tag, byte[] data) {
-		final String val = new String(data, 0, data.length);
-		Log.d(TAG, "onDataReceived=" + val + "," + tag + "," + data.length);
-		this.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				mTextView.setText(val);
-			}
-		});
-	}
-
-	@Override
-	public void onDataSendProcess(String tag, int percent) {
-		Log.d(TAG, "onDataSendProcess progress:" + percent);
-	}
-
-	@Override
-	public void onDataSended(String tag) {
-		Log.d(TAG, "onDataSended [" + tag + "]");
+	public void onSended(AbsTransmitter obj) {
+		Log.d(TAG, "onFileSended [" + obj.getName() + "]");
 	}
 
 	@Override
