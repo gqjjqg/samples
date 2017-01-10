@@ -3,17 +3,19 @@ package com.guo.samples;
 import android.app.Activity;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 
+import com.guo.android_extend.tools.CameraHelper;
 import com.guo.android_extend.widget.CameraGLSurfaceView;
 import com.guo.android_extend.widget.CameraSurfaceView;
 import com.guo.android_extend.widget.CameraSurfaceView.OnCameraListener;
 
 import java.util.List;
 
-public class CameraActivity extends Activity implements OnCameraListener {
+public class CameraActivity extends Activity implements OnCameraListener, View.OnTouchListener, Camera.AutoFocusCallback {
 	private final String TAG = this.getClass().getSimpleName();
 	
 	private int mWidth, mHeight, mFormat;
@@ -32,7 +34,7 @@ public class CameraActivity extends Activity implements OnCameraListener {
 		this.setContentView(R.layout.activity_camera);
 
 		mGLSurfaceView = (CameraGLSurfaceView) findViewById(R.id.glsurfaceView1);
-
+		mGLSurfaceView.setOnTouchListener(this);
 		mSurfaceView = (CameraSurfaceView) findViewById(R.id.surfaceView1);
 		mSurfaceView.setOnCameraListener(this);
 		mSurfaceView.setupGLSurafceView(mGLSurfaceView, true, false, 270);
@@ -55,7 +57,7 @@ public class CameraActivity extends Activity implements OnCameraListener {
 	@Override
 	public Camera setupCamera() {
 		// TODO Auto-generated method stub
-		mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
+		mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
 		try {
 			Camera.Parameters parameters = mCamera.getParameters();
 			parameters.setPreviewSize(mWidth, mHeight);
@@ -79,7 +81,7 @@ public class CameraActivity extends Activity implements OnCameraListener {
 			//parameters.setExposureCompensation(parameters.getMaxExposureCompensation());
 			//parameters.setWhiteBalance(Camera.Parameters.WHITE_BALANCE_AUTO);
 			//parameters.setAntibanding(Camera.Parameters.ANTIBANDING_AUTO);
-			//parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+			//parmeters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
 			//parameters.setSceneMode(Camera.Parameters.SCENE_MODE_AUTO);
 			//parameters.setColorEffect(Camera.Parameters.EFFECT_NONE);
 			mCamera.setParameters(parameters);
@@ -112,4 +114,16 @@ public class CameraActivity extends Activity implements OnCameraListener {
 
 	}
 
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		CameraHelper.touchFocus(mCamera, event, v, this);
+		return false;
+	}
+
+	@Override
+	public void onAutoFocus(boolean success, Camera camera) {
+		if (success) {
+			Log.d(TAG, "Camera Focus SUCCESS!");
+		}
+	}
 }
