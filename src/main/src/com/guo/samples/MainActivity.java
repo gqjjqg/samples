@@ -1,12 +1,5 @@
 package com.guo.samples;
 
-import com.guo.android_extend.network.socket.SocketClient;
-import com.guo.android_extend.network.socket.SocketServer;
-import com.guo.android_extend.widget.ExtOrientationDetector;
-import com.guo.android_extend.widget.ExtOrientationDetector.OnOrientationListener;
-import com.guo.android_extend.widget.ExtImageView;
-import com.guo.android_extend.widget.HListView;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +14,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.guo.android_extend.widget.ExtImageView;
+import com.guo.android_extend.widget.ExtOrientationDetector;
+import com.guo.android_extend.widget.ExtOrientationDetector.OnOrientationListener;
+import com.guo.android_extend.widget.HListView;
 
 public class MainActivity extends Activity {
 	
@@ -59,7 +57,7 @@ public class MainActivity extends Activity {
 				"ListImageNet",
 				"Camera","CameraV4L2",
 				"UDP","Socket","SocketClient","SocketServer",
-				"Test6","Test6",
+				"HCSListView","Test6",
 				"Test5","Test6","Test6",
 				"Test6","Test6","Test6",
 		};
@@ -148,6 +146,9 @@ public class MainActivity extends Activity {
 				startActivity(intent);
 			} else if (arg2 == 10) {
 				Intent intent = new Intent(MainActivity.this, SocketServerActivity.class);
+				startActivity(intent);
+			} else if (arg2 == 11) {
+				Intent intent = new Intent(MainActivity.this, HCSListActivity.class);
 				startActivity(intent);
 			}
 		}

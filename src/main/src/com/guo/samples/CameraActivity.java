@@ -77,7 +77,7 @@ public class CameraActivity extends Activity implements OnCameraListener, View.O
 					Log.d(TAG, "V=" + data);
 				}
 			}
-			parameters.setPreviewFpsRange(15000, 30000);
+			//parameters.setPreviewFpsRange(15000, 30000);
 			//parameters.setExposureCompensation(parameters.getMaxExposureCompensation());
 			//parameters.setWhiteBalance(Camera.Parameters.WHITE_BALANCE_AUTO);
 			//parameters.setAntibanding(Camera.Parameters.ANTIBANDING_AUTO);
@@ -105,12 +105,12 @@ public class CameraActivity extends Activity implements OnCameraListener, View.O
 	}
 
 	@Override
-	public void onPreview(byte[] data, int width, int height, int format) {
+	public void onPreview(byte[] data, int width, int height, int format, long timestamp) {
 
 	}
 
 	@Override
-	public void onPreviewRender(byte[] data, int width, int height, int format) {
+	public void onPreviewRender(byte[] data, int width, int height, int format, long timestamp) {
 
 	}
 

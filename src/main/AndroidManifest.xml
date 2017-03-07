@@ -54,6 +54,10 @@
             android:label="@string/app_name" >
         </activity>
         <activity
+            android:name="com.guo.samples.HCSListActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
             android:name="com.guo.samples.CameraActivity"
             android:label="@string/app_name" >
         </activity>

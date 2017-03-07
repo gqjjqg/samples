@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+	<com.guo.android_extend.widget.effective.HCSListView
+	    android:id="@+id/hlist"
+	    android:layout_width="wrap_content"
+	    android:layout_height="220dp"
+	    android:layout_centerHorizontal="true"
+	    android:scrollbars="none"
+	    app:dividerHeight="1dp"
+		app:itemCenter="true"
+	    app:listSelector="@android:drawable/list_selector_background" />
+
+</RelativeLayout>
