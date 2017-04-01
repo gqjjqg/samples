@@ -22,10 +22,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            jniDebuggable true
+        }
     }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':android-extend')
+    compile project(path: ':android-extend', configuration: 'release')
 }
