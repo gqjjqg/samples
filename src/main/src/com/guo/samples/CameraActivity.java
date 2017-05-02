@@ -37,7 +37,7 @@ public class CameraActivity extends Activity implements OnCameraListener, View.O
 		mGLSurfaceView.setOnTouchListener(this);
 		mSurfaceView = (CameraSurfaceView) findViewById(R.id.surfaceView1);
 		mSurfaceView.setOnCameraListener(this);
-		mSurfaceView.setupGLSurafceView(mGLSurfaceView, true, false, 270);
+		mSurfaceView.setupGLSurafceView(mGLSurfaceView, true, false, 90);
 		mSurfaceView.debug_print_fps(true, false);
 
 		mWidth = 1280;
@@ -86,9 +86,11 @@ public class CameraActivity extends Activity implements OnCameraListener, View.O
 			//parameters.setColorEffect(Camera.Parameters.EFFECT_NONE);
 			mCamera.setParameters(parameters);
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (mCamera != null) {
 			mWidth = mCamera.getParameters().getPreviewSize().width;
 			mHeight = mCamera.getParameters().getPreviewSize().height;
-			e.printStackTrace();
 		}
 		return mCamera;
 	}
