@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.guo.android_extend.tools.CameraHelper;
+import com.guo.android_extend.widget.CameraFrameData;
 import com.guo.android_extend.widget.CameraGLSurfaceView;
 import com.guo.android_extend.widget.CameraSurfaceView;
 import com.guo.android_extend.widget.CameraSurfaceView.OnCameraListener;
@@ -107,12 +108,18 @@ public class CameraActivity extends Activity implements OnCameraListener, View.O
 	}
 
 	@Override
-	public void onPreview(byte[] data, int width, int height, int format, long timestamp) {
+	public Object onPreview(byte[] data, int width, int height, int format, long timestamp) {
+		return null;
+	}
+
+
+	@Override
+	public void onBeforeRender(CameraFrameData data) {
 
 	}
 
 	@Override
-	public void onPreviewRender(byte[] data, int width, int height, int format, long timestamp) {
+	public void onAfterRender(CameraFrameData data) {
 
 	}
 
