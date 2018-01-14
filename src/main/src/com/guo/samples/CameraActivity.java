@@ -102,10 +102,10 @@ public class CameraActivity extends Activity implements OnCameraListener, View.O
 	}
 
 	@Override
-	public boolean startPreviewLater() {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean startPreviewImmediately() {
+		return true;
 	}
+
 
 	@Override
 	public Object onPreview(byte[] data, int width, int height, int format, long timestamp) {

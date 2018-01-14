@@ -2,6 +2,9 @@ package com.guo.samples;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.DhcpInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,15 +19,19 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.guo.android_extend.network.socket.Data.AbsTransmitter;
-import com.guo.android_extend.network.socket.OnSocketListener;
-import com.guo.android_extend.network.socket.SocketModule;
-import com.guo.android_extend.network.socket.SocketServer;
-import com.guo.android_extend.network.udp.UDPModule;
+import com.guo.android_extend.java.network.socket.Data.AbsTransmitter;
+import com.guo.android_extend.java.network.socket.OnSocketListener;
+import com.guo.android_extend.java.network.socket.SocketServer;
+import com.guo.android_extend.java.network.udp.UDPModule;
 import com.guo.android_extend.widget.ExtImageView;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 /**
@@ -62,7 +69,10 @@ public class SocketServerActivity extends Activity implements UDPModule.OnUDPLis
 		TextView tv = (TextView) findViewById(R.id.textView1);
 		tv.setText("Server");
 
-		mUDPModule = new UDPModule(this, 5000);
+		WifiManager wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+		String mac = wifiManager.getConnectionInfo().getMacAddress();
+
+		mUDPModule = new UDPModule(broadcastLAN2(),true, mac, Build.MODEL, 5000);
 		mUDPModule.setOnUDPListener(this);
 		mListDevice = new ListDevice(this);
 		view.setAdapter(mListDevice);
@@ -70,6 +80,108 @@ public class SocketServerActivity extends Activity implements UDPModule.OnUDPLis
 		mSocketServer = new SocketServer(workdir);
 		mSocketServer.setOnSocketListener(this);
 		mSocketServer.start();
+	}
+
+	/**
+	 *
+	 * @param ip
+	 * @param mask
+	 * @return
+	 * @throws Exception
+	 */
+	private InetAddress getBroadcastAddress(int ip, int mask) throws Exception {
+		int broadcast = (ip & mask) | ~mask;
+		byte[] quads = new byte[4];
+		for (int k = 0; k < 4; k++) {
+			quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
+		}
+		return InetAddress.getByAddress(quads);
+	}
+
+	public InetAddress multicastLAN() {
+		try {
+			InetAddress mInetAddress = InetAddress.getByName("224.0.0.5");
+			Log.d(TAG, "multicast=" + mInetAddress);
+			return mInetAddress;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private String FormatString(int value){
+		return String.format("%d.%d.%d.%d",
+				(value & 0xff), (value >> 8 & 0xff),
+				(value >> 16 & 0xff), (value >> 24 & 0xff));
+	}
+
+	private void debug_print(WifiManager wifiManager) {
+			WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+			DhcpInfo dhcpInfo = wifiManager.getDhcpInfo();
+			Log.d(TAG, "AP=" + dhcpInfo.ipAddress + ",MS=" + dhcpInfo.netmask);
+			String wifiProperty = "wifi ssd" + wifiInfo.getSSID() + '\n' +
+			 				"ip:" + FormatString(dhcpInfo.ipAddress) + '\n' +
+			 				"mask:" + FormatString(dhcpInfo.netmask) + '\n' +
+			 				"netgate:" + FormatString(dhcpInfo.gateway) + '\n' +
+			 				"dns:" + FormatString(dhcpInfo.dns1);
+			Log.d(TAG, wifiProperty);
+			try {
+					Log.d(TAG, "test:" + getBroadcastAddress(dhcpInfo.ipAddress, dhcpInfo.netmask));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+		}
+
+	/**
+	 * 局域网广播
+	 * @return true or not.
+	 */
+	public InetAddress broadcastLAN2() {
+		try {
+			InetAddress mInetAddress = null;
+			Enumeration<?> netInterfaces = (Enumeration<?>) NetworkInterface.getNetworkInterfaces();
+			while (netInterfaces.hasMoreElements()) {
+				NetworkInterface netInterface = (NetworkInterface) netInterfaces.nextElement();
+				if (!netInterface.isLoopback()&& netInterface.isUp()) {
+					List<InterfaceAddress> interfaceAddresses = netInterface.getInterfaceAddresses();
+					for (InterfaceAddress interfaceAddress : interfaceAddresses) {
+						InetAddress local = interfaceAddress.getAddress();
+						if (local instanceof Inet4Address) {
+							Log.d(TAG, "ip=" + interfaceAddress.getAddress().getHostAddress());
+							mInetAddress = interfaceAddress.getBroadcast();
+							Log.d(TAG, "broadcast=" + mInetAddress.getHostAddress());
+						}
+					}
+				}
+			}
+			return mInetAddress;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * 局域网广播
+	 * @return true or not.
+	 */
+	public InetAddress broadcastLAN() {
+		try {
+			InetAddress mInetAddress;
+			WifiManager wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+			DhcpInfo dhcpInfo = wifiManager.getDhcpInfo();
+			debug_print(wifiManager);
+			if (dhcpInfo.ipAddress == 0) { // ANDROID AP
+				mInetAddress = InetAddress.getByName("192.168.43.255");
+			} else {
+				mInetAddress = getBroadcastAddress(dhcpInfo.ipAddress, dhcpInfo.netmask);
+			}
+			Log.d(TAG, "broadcast=" + mInetAddress);
+			return mInetAddress;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override
