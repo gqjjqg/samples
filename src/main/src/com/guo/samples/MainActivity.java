@@ -57,7 +57,7 @@ public class MainActivity extends Activity {
 				"ListImageNet",
 				"Camera","CameraV4L2",
 				"UDP","Socket","SocketClient","SocketServer",
-				"HCSListView","Test6",
+				"HCSListView","Camera2",
 				"Test5","Test6","Test6",
 				"Test6","Test6","Test6",
 		};
@@ -149,6 +149,9 @@ public class MainActivity extends Activity {
 				startActivity(intent);
 			} else if (arg2 == 11) {
 				Intent intent = new Intent(MainActivity.this, HCSListActivity.class);
+				startActivity(intent);
+			} else if (arg2 == 12) {
+				Intent intent = new Intent(MainActivity.this, Camera2Activity.class);
 				startActivity(intent);
 			}
 		}

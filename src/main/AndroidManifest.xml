@@ -5,8 +5,8 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="10"
-        android:targetSdkVersion="19" />
+        android:minSdkVersion="21"
+        android:targetSdkVersion="21" />
 
     <!-- wifi internet -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
@@ -59,6 +59,10 @@
         </activity>
         <activity
             android:name="com.guo.samples.CameraActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.guo.samples.Camera2Activity"
             android:label="@string/app_name" >
         </activity>
         <activity

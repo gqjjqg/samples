@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.guo.samples"
-        minSdkVersion 10
+        minSdkVersion 21
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
@@ -30,5 +30,5 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.guo.android_extend:android-extend:1.0.0'
+    implementation project(':android-extend')
 }
