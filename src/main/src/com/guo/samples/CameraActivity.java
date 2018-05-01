@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 
 import com.guo.android_extend.tools.CameraHelper;
 import com.guo.android_extend.widget.CameraFrameData;
@@ -16,13 +17,17 @@ import com.guo.android_extend.widget.CameraSurfaceView.OnCameraListener;
 
 import java.util.List;
 
-public class CameraActivity extends Activity implements OnCameraListener, View.OnTouchListener, Camera.AutoFocusCallback {
+public class CameraActivity extends Activity implements OnCameraListener, View.OnTouchListener, Camera.AutoFocusCallback, View.OnClickListener {
 	private final String TAG = this.getClass().getSimpleName();
 	
 	private int mWidth, mHeight, mFormat;
 	private CameraSurfaceView mSurfaceView;
 	private CameraGLSurfaceView mGLSurfaceView;
 	private Camera mCamera;
+	private Button mButton;
+	private Button mButton1;
+	private boolean isPause;
+	private int mCameraID;
 	
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -34,6 +39,11 @@ public class CameraActivity extends Activity implements OnCameraListener, View.O
 		
 		this.setContentView(R.layout.activity_camera);
 
+		mWidth = 1280;
+		mHeight = 720;
+		mFormat = ImageFormat.NV21;
+		mCameraID = Camera.CameraInfo.CAMERA_FACING_BACK;
+
 		mGLSurfaceView = (CameraGLSurfaceView) findViewById(R.id.glsurfaceView1);
 		mGLSurfaceView.setOnTouchListener(this);
 		mSurfaceView = (CameraSurfaceView) findViewById(R.id.surfaceView1);
@@ -41,9 +51,15 @@ public class CameraActivity extends Activity implements OnCameraListener, View.O
 		mSurfaceView.setupGLSurafceView(mGLSurfaceView, true, false, 90);
 		mSurfaceView.debug_print_fps(true, false);
 
-		mWidth = 1280;
-		mHeight = 720;
-		mFormat = ImageFormat.NV21;
+		mButton = (Button) findViewById(R.id.button5);
+		mButton.setOnClickListener(this);
+		mButton.setText("Front");
+
+		mButton1 = (Button) findViewById(R.id.button6);
+		mButton1.setOnClickListener(this);
+		mButton1.setText("Stop");
+		isPause = false;
+
 	}
 
 	/* (non-Javadoc)
@@ -58,7 +74,7 @@ public class CameraActivity extends Activity implements OnCameraListener, View.O
 	@Override
 	public Camera setupCamera() {
 		// TODO Auto-generated method stub
-		mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
+		mCamera = Camera.open(mCameraID);
 		try {
 			Camera.Parameters parameters = mCamera.getParameters();
 			parameters.setPreviewSize(mWidth, mHeight);
@@ -133,6 +149,32 @@ public class CameraActivity extends Activity implements OnCameraListener, View.O
 	public void onAutoFocus(boolean success, Camera camera) {
 		if (success) {
 			Log.d(TAG, "Camera Focus SUCCESS!");
+		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (v.getId() == R.id.button5) {
+			if (mCameraID == Camera.CameraInfo.CAMERA_FACING_BACK) {
+				mCameraID = Camera.CameraInfo.CAMERA_FACING_FRONT;
+				mSurfaceView.resetCamera();
+				mGLSurfaceView.getGLES2Render().setViewAngle(true, 270);
+				mButton.setText("Rear");
+			} else {
+				mCameraID = Camera.CameraInfo.CAMERA_FACING_BACK;
+				mSurfaceView.resetCamera();
+				mGLSurfaceView.getGLES2Render().setViewAngle(false, 90);
+				mButton.setText("Front");
+			}
+		} else if (v.getId() == R.id.button6) {
+			if (isPause) {
+				mSurfaceView.startPreview();
+				mButton1.setText("Stop");
+			} else {
+				mSurfaceView.stopPreview();
+				mButton1.setText("Start");
+			}
+			isPause = !isPause;
 		}
 	}
 }
