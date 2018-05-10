@@ -2,6 +2,7 @@ package com.guo.samples;
 
 import android.app.Activity;
 import android.graphics.ImageFormat;
+import android.hardware.Camera;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.util.Size;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 
 import com.guo.android_extend.widget.Camera2GLSurfaceView;
 import com.guo.android_extend.widget.Camera2Manager;
@@ -25,12 +27,15 @@ import java.util.List;
  * Created by Guo on 2018/1/23.
  */
 
-public class Camera2Activity extends Activity implements View.OnTouchListener, Camera2GLSurfaceView.OnCameraListener {
+public class Camera2Activity extends Activity implements View.OnTouchListener, Camera2GLSurfaceView.OnCameraListener, View.OnClickListener {
     private final String TAG = this.getClass().getSimpleName();
 
     private String[] ids = null;
     private int mWidth, mHeight, mFormat;
     private Camera2GLSurfaceView mGLSurfaceView;
+    private boolean isPause;
+    private Button mButton;
+    private Button mButton1;
 
     /* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -41,9 +46,10 @@ public class Camera2Activity extends Activity implements View.OnTouchListener, C
         super.onCreate(savedInstanceState);
 
         this.setContentView(R.layout.activity_camera2);
-        mWidth = 1280;
+        mWidth = 960;
         mHeight = 720;
         mFormat = ImageFormat.YUV_420_888;
+        //mFormat = ImageFormat.NV21;
 
         mGLSurfaceView = (Camera2GLSurfaceView) findViewById(R.id.glsurfaceView1);
         mGLSurfaceView.setOnTouchListener(this);
@@ -53,6 +59,15 @@ public class Camera2Activity extends Activity implements View.OnTouchListener, C
         mGLSurfaceView.setAspectRatio(mHeight, mWidth);
         mGLSurfaceView.setAutoFitMax(true);
         mGLSurfaceView.debug_print_fps(true);
+
+        mButton = (Button) findViewById(R.id.button5);
+        mButton.setOnClickListener(this);
+        mButton.setText("Front");
+
+        mButton1 = (Button) findViewById(R.id.button6);
+        mButton1.setOnClickListener(this);
+        mButton1.setText("Stop");
+        isPause = false;
     }
 
     @Override
@@ -117,8 +132,8 @@ public class Camera2Activity extends Activity implements View.OnTouchListener, C
     }
 
     @Override
-    public boolean onPreview(String id, byte[] data, int width, int height, int format, long timestamp) {
-        return true;
+    public Object onPreview(String id, byte[] data, int width, int height, int format, long timestamp) {
+        return null;
     }
 
     @Override
@@ -135,6 +150,22 @@ public class Camera2Activity extends Activity implements View.OnTouchListener, C
             }else if ((event & Camera2GLSurfaceView.OnCameraListener.EVENT_CAMERA_ERROR) == Camera2GLSurfaceView.OnCameraListener.EVENT_CAMERA_ERROR) {
                 Log.d(TAG, "error: 1, " + (event ^ Camera2GLSurfaceView.OnCameraListener.EVENT_CAMERA_ERROR));
             }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.button5) {
+
+        } else if (v.getId() == R.id.button6) {
+            if (isPause) {
+                mGLSurfaceView.getCamera2Manager().startPreview();
+                mButton1.setText("Stop");
+            } else {
+                mGLSurfaceView.getCamera2Manager().stopPreview();
+                mButton1.setText("Start");
+            }
+            isPause = !isPause;
         }
     }
 }
