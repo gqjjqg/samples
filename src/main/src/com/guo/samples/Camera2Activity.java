@@ -2,7 +2,6 @@ package com.guo.samples;
 
 import android.app.Activity;
 import android.graphics.ImageFormat;
-import android.hardware.Camera;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
@@ -16,11 +15,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.guo.android_extend.widget.Camera2GLSurfaceView;
-import com.guo.android_extend.widget.Camera2Manager;
-import com.guo.android_extend.widget.CameraGLSurfaceView;
-import com.guo.android_extend.widget.CameraSurfaceView;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -34,6 +29,7 @@ public class Camera2Activity extends Activity implements View.OnTouchListener, C
     private int mWidth, mHeight, mFormat;
     private Camera2GLSurfaceView mGLSurfaceView;
     private boolean isPause;
+    private int mCameraIdx;
     private Button mButton;
     private Button mButton1;
 
@@ -46,10 +42,11 @@ public class Camera2Activity extends Activity implements View.OnTouchListener, C
         super.onCreate(savedInstanceState);
 
         this.setContentView(R.layout.activity_camera2);
-        mWidth = 960;
+        mWidth = 1280;
         mHeight = 720;
         mFormat = ImageFormat.YUV_420_888;
         //mFormat = ImageFormat.NV21;
+        mCameraIdx = 0;
 
         mGLSurfaceView = (Camera2GLSurfaceView) findViewById(R.id.glsurfaceView1);
         mGLSurfaceView.setOnTouchListener(this);
@@ -77,7 +74,7 @@ public class Camera2Activity extends Activity implements View.OnTouchListener, C
 
     @Override
     public String[] chooseCamera(String[] cameras) {
-        ids = new String[]{cameras[0]};
+        ids = new String[]{cameras[mCameraIdx]};
         return ids;
     }
 
@@ -156,7 +153,16 @@ public class Camera2Activity extends Activity implements View.OnTouchListener, C
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.button5) {
-
+            mCameraIdx = mCameraIdx ^ 1;
+            mGLSurfaceView.getCamera2Manager().closeCamera();
+            mGLSurfaceView.getCamera2Manager().openCamera();
+            if (mCameraIdx == 0) {
+                mButton.setText("Front");
+                mGLSurfaceView.setRenderConfig(90, false);
+            } else {
+                mButton.setText("Rear");
+                mGLSurfaceView.setRenderConfig(270, true);
+            }
         } else if (v.getId() == R.id.button6) {
             if (isPause) {
                 mGLSurfaceView.getCamera2Manager().startPreview();

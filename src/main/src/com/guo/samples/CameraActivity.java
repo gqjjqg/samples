@@ -158,12 +158,12 @@ public class CameraActivity extends Activity implements OnCameraListener, View.O
 			if (mCameraID == Camera.CameraInfo.CAMERA_FACING_BACK) {
 				mCameraID = Camera.CameraInfo.CAMERA_FACING_FRONT;
 				mSurfaceView.resetCamera();
-				mGLSurfaceView.getGLES2Render().setViewAngle(true, 270);
+				mGLSurfaceView.setRenderConfig(270, true);
 				mButton.setText("Rear");
 			} else {
 				mCameraID = Camera.CameraInfo.CAMERA_FACING_BACK;
 				mSurfaceView.resetCamera();
-				mGLSurfaceView.getGLES2Render().setViewAngle(false, 90);
+				mGLSurfaceView.setRenderConfig(90, false);
 				mButton.setText("Front");
 			}
 		} else if (v.getId() == R.id.button6) {
