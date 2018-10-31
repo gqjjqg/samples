@@ -1,10 +1,5 @@
 package com.guo.samples;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -19,16 +14,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.guo.android_extend.cache.BitmapMonitor;
 import com.guo.android_extend.cache.BitmapMonitorThread;
 import com.guo.android_extend.java.network.http.Downloader;
 import com.guo.android_extend.java.network.http.DownloaderManager;
 import com.guo.android_extend.widget.ExtImageView;
+
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A list view example where the 
@@ -171,7 +171,7 @@ public class ImageListNetActivity extends ListActivity implements OnItemClickLis
     		        op.inSampleSize = be;  
     		        super.mBitmap = BitmapFactory.decodeFile(super.mBitmapID, op);  
     		        super.mBitmap = ThumbnailUtils.extractThumbnail(super.mBitmap, 320, 240,  
-    		                ThumbnailUtils.OPTIONS_RECYCLE_INPUT);  
+    		                ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
     			} catch (Exception e) {
     		    	e.printStackTrace();
     		    }

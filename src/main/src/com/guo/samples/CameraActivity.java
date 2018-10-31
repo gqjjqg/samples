@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
+import com.guo.android_extend.GLES2Render;
 import com.guo.android_extend.tools.CameraHelper;
 import com.guo.android_extend.widget.CameraFrameData;
 import com.guo.android_extend.widget.CameraGLSurfaceView;
@@ -48,7 +49,7 @@ public class CameraActivity extends Activity implements OnCameraListener, View.O
 		mGLSurfaceView.setOnTouchListener(this);
 		mSurfaceView = (CameraSurfaceView) findViewById(R.id.surfaceView1);
 		mSurfaceView.setOnCameraListener(this);
-		mSurfaceView.setupGLSurafceView(mGLSurfaceView, true, false, 90);
+		mSurfaceView.setupGLSurafceView(mGLSurfaceView, true, GLES2Render.MIRROR_NONE, 90);
 		mSurfaceView.debug_print_fps(true, false);
 
 		mButton = (Button) findViewById(R.id.button5);
@@ -158,12 +159,12 @@ public class CameraActivity extends Activity implements OnCameraListener, View.O
 			if (mCameraID == Camera.CameraInfo.CAMERA_FACING_BACK) {
 				mCameraID = Camera.CameraInfo.CAMERA_FACING_FRONT;
 				mSurfaceView.resetCamera();
-				mGLSurfaceView.setRenderConfig(270, true);
+				mGLSurfaceView.setRenderConfig(270, GLES2Render.MIRROR_X);
 				mButton.setText("Rear");
 			} else {
 				mCameraID = Camera.CameraInfo.CAMERA_FACING_BACK;
 				mSurfaceView.resetCamera();
-				mGLSurfaceView.setRenderConfig(90, false);
+				mGLSurfaceView.setRenderConfig(90, GLES2Render.MIRROR_NONE);
 				mButton.setText("Front");
 			}
 		} else if (v.getId() == R.id.button6) {

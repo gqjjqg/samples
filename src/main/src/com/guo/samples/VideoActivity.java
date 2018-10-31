@@ -95,9 +95,9 @@ public class VideoActivity extends Activity implements Renderer, VideoClient.OnC
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		// TODO Auto-generated method stub
 		if (mFormat == ImageConverter.CP_MJPEG) {
-			mGLES2Render = new GLES2Render(true, 0, ImageConverter.CP_PAF_NV21, false);
+			mGLES2Render = new GLES2Render(GLES2Render.MIRROR_X, 0, ImageConverter.CP_PAF_NV21, false);
 		} else {
-			mGLES2Render = new GLES2Render(true, 0, mFormat, false);
+			mGLES2Render = new GLES2Render(GLES2Render.MIRROR_X, 0, mFormat, false);
 		}
 	}
 

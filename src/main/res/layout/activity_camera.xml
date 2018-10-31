@@ -7,6 +7,7 @@
         android:id="@+id/surfaceView1"
         android:layout_width="1dp"
         android:layout_height="1dp" />
+
 	<com.guo.android_extend.widget.CameraGLSurfaceView
         android:id="@+id/glsurfaceView1"
         android:layout_width="match_parent"

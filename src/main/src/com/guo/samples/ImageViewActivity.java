@@ -9,6 +9,8 @@ import android.graphics.Rect;
 import android.media.ExifInterface;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.guo.android_extend.image.ImageConverter;
 import com.guo.android_extend.widget.ExtOrientationDetector;
 import com.guo.android_extend.widget.controller.ImageController;
 import com.guo.android_extend.widget.ExtImageView;
@@ -21,6 +23,7 @@ public class ImageViewActivity extends Activity {
 	ExtOrientationDetector mODetector;
 	ExtImageView eiv;
 	Bitmap mBitmap;
+	ImageConverter mImageConverter;
 	Rect rect;
 	
 	/* (non-Javadoc)
@@ -35,6 +38,8 @@ public class ImageViewActivity extends Activity {
 		
 		mODetector = new ExtOrientationDetector(this);
 		mODetector.enable();
+
+		mImageConverter = new ImageConverter();
 		
 		eiv = (ExtImageView) this.findViewById(R.id.imageView1);
 		eiv.setBackgroundColor(Color.BLACK);
@@ -81,8 +86,6 @@ public class ImageViewActivity extends Activity {
 
 	/**
 	 * @param path
-	 * @param SWidth screen width
-	 * @param SHeight screen height
 	 * @return bitmap
 	 */
 	private Bitmap loadImage(String path) {
@@ -96,7 +99,7 @@ public class ImageViewActivity extends Activity {
 	        BitmapFactory.decodeFile(path, op);
 	        Log.d(TAG, "Image:" + op.outWidth + "X" + op.outHeight);
 			
-	        op.inSampleSize = 2;
+	        op.inSampleSize = 1;
 	        op.inJustDecodeBounds = false;  
 	        //op.inMutable = true;
 	        res = BitmapFactory.decodeFile(path, op);
@@ -113,6 +116,16 @@ public class ImageViewActivity extends Activity {
         	Bitmap bmp = Bitmap.createBitmap(res, 0, 0, res.getWidth(), res.getHeight(), matrix, true);
         	Log.d(TAG, "check target Image:" + bmp.getWidth() + "X" + bmp.getHeight());
 
+        	try {
+				byte[] data = new byte[bmp.getWidth() * bmp.getHeight() * 3 / 2];
+				mImageConverter.initial(bmp.getWidth(), bmp.getHeight(), ImageConverter.CP_PAF_NV12);
+				if (!mImageConverter.convert(bmp, data)) {
+					Log.e(TAG, "CONVERT FAIL!");
+				}
+				mImageConverter.destroy();
+			} catch (Exception e) {
+        		e.printStackTrace();
+			}
 			return bmp;
 		} catch (Exception e) {
 	    	e.printStackTrace();
