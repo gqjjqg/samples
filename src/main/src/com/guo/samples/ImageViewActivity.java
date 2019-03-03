@@ -19,7 +19,7 @@ public class ImageViewActivity extends Activity {
 
 	private final String TAG = this.getClass().toString();
 
-	String mFilePath;
+	String mFilePath = null;
 	ExtOrientationDetector mODetector;
 	ExtImageView eiv;
 	Bitmap mBitmap;
@@ -47,10 +47,12 @@ public class ImageViewActivity extends Activity {
 		mODetector.addReceiver(eiv);
 		
 		//initial data.
-		if (!getIntentData(getIntent().getExtras())) {
+		mFilePath = getIntent().getStringExtra("image");
+		if (mFilePath == null) {
 			Log.e(TAG, "getIntentData fail!");
 			eiv.setImageResource(R.drawable.ic_launcher);
 		} else {
+			getIntent().getExtras().getString("image");
 			mBitmap = loadImage(mFilePath);
 			eiv.setImageBitmap(mBitmap);
 		}

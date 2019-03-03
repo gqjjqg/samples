@@ -20,6 +20,8 @@ import com.guo.android_extend.widget.ExtOrientationDetector;
 import com.guo.android_extend.widget.ExtOrientationDetector.OnOrientationListener;
 import com.guo.android_extend.widget.HListView;
 
+import java.io.File;
+
 public class MainActivity extends Activity {
 	
 	ExtOrientationDetector mODetector;
@@ -116,6 +118,12 @@ public class MainActivity extends Activity {
 			t.show();
 			if (arg2 == 0) {
 				Intent intent = new Intent(MainActivity.this, ImageViewActivity.class);
+				Log.e("ERROR", "ImageListActivity");
+				if (new File("/sdcard/Download/01.jpg").exists()) {
+					intent.putExtra("image", "/sdcard/Download/01.jpg");
+				} else {
+					Log.e("ERROR", "/sdcard/Download/01.jpg NOT EXIST!");
+				}
 				startActivity(intent);
 			} else if (arg2 == 1) {
 				Intent intent = new Intent(MainActivity.this, ImageListActivity.class);

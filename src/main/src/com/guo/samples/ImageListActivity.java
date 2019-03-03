@@ -209,9 +209,7 @@ public class ImageListActivity extends ListActivity implements OnItemClickListen
 		String full = ((ListImage.Data)mListImage.getItem(position)).path;
 		Log.d("Image", full);
 		Intent intent = new Intent(ImageListActivity.this, ImageViewActivity.class);
-		Bundle bundle = new Bundle();
-		bundle.putString("imagePath", full);
-		intent.putExtras(bundle);
+		intent.putExtra("image", full);
 		startActivity(intent);
 	}
 
